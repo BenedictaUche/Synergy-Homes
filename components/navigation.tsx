@@ -41,8 +41,8 @@ export function Navigation() {
             {/* Logo */}
             <Link href="/" className="group">
               <motion.div whileHover={{ scale: 1.02 }} className="flex flex-col">
-                <span className="text-2xl lg:text-3xl font-semibold tracking-wider text-primary">PRESTIGE</span>
-                <span className="text-xs tracking-[0.3em] text-muted-foreground -mt-1">ESTATES</span>
+                <span className="text-2xl lg:text-3xl font-semibold tracking-wider text-primary">SYNERGY HOMES</span>
+                <span className="text-xs tracking-[0.3em] text-muted-foreground -mt-1">LIMITED</span>
               </motion.div>
             </Link>
 

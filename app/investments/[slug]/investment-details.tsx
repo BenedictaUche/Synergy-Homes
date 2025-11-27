@@ -196,7 +196,7 @@ export function InvestmentDetails({ investment }: InvestmentDetailsProps) {
                   </div>
                   <div>
                     <div className="font-medium">Investment Advisory</div>
-                    <div className="text-sm text-muted-foreground">Prestige Estates</div>
+                    <div className="text-sm text-muted-foreground">Synergy Homes Limited</div>
                   </div>
                 </div>
                 <div className="space-y-2 text-sm">
@@ -208,11 +208,11 @@ export function InvestmentDetails({ investment }: InvestmentDetailsProps) {
                     +234 123 456 7890
                   </a>
                   <a
-                    href="mailto:invest@prestigeestates.com"
+                    href="mailto:contact@synergyhomes.com.ng"
                     className="flex items-center gap-2 text-muted-foreground hover:text-foreground transition-colors"
                   >
                     <Mail size={14} />
-                    invest@prestigeestates.com
+                    contact@synergyhomes.com.ng
                   </a>
                 </div>
               </div>

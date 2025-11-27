@@ -8,7 +8,7 @@ const testimonials = [
   {
     id: 1,
     content:
-      "Prestige Estates made our dream home a reality. Their attention to detail and understanding of our needs was exceptional. The entire process was seamless and professional.",
+      "Synergy Homes Limited made our dream home a reality. Their attention to detail and understanding of our needs was exceptional. The entire process was seamless and professional.",
     author: "Chief Adebayo Williams",
     position: "CEO, Williams Holdings",
     image: "/professional-african-businessman.png",
@@ -16,7 +16,7 @@ const testimonials = [
   {
     id: 2,
     content:
-      "The team at Prestige Estates demonstrated unparalleled expertise in the luxury market. They found us the perfect investment property that exceeded all our expectations.",
+      "The team at Synergy Homes Limited demonstrated unparalleled expertise in the luxury market. They found us the perfect investment property that exceeded all our expectations.",
     author: "Mrs. Chidinma Okonkwo",
     position: "Managing Director, Okonkwo Industries",
     image: "/professional-african-businesswoman-portrait.jpg",
@@ -24,7 +24,7 @@ const testimonials = [
   {
     id: 3,
     content:
-      "Working with Prestige Estates was a privilege. Their knowledge of the premium property market and commitment to client satisfaction is truly world-class.",
+      "Working with Synergy Homes Limited was a privilege. Their knowledge of the premium property market and commitment to client satisfaction is truly world-class.",
     author: "Dr. Emmanuel Nwachukwu",
     position: "Consultant Surgeon",
     image: "/professional-african-doctor-portrait.jpg",

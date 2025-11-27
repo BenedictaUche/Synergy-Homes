@@ -17,9 +17,9 @@ const inter = Inter({
 })
 
 export const metadata: Metadata = {
-  title: "Prestige Estates | Luxury Real Estate",
+  title: "Synergy Homes Limited | Luxury Real Estate",
   description:
-    "Discover exceptional luxury properties and premium investment opportunities with Prestige Estates. Your gateway to refined living.",
+    "Discover exceptional luxury properties and premium investment opportunities with Synergy Homes Limited. Your gateway to refined living.",
   generator: "v0.app",
   icons: {
     icon: [

@@ -7,8 +7,8 @@ import { Building2, Key, TrendingUp, Shield, ArrowRight } from "lucide-react"
 const services = [
   {
     icon: Building2,
-    title: "Property Sales",
-    description: "Access our exclusive portfolio of luxury residential and commercial properties in prime locations.",
+    title: "Lands and Property Sales",
+    description: "Access our exclusive portfolio of luxury residential and commercial properties and lands in prime locations.",
   },
   {
     icon: Key,
@@ -45,7 +45,7 @@ export function ServicesSection() {
             <span className="text-primary font-medium"> Solutions</span>
           </h2>
           <p className="text-muted-foreground leading-relaxed">
-            From acquisition to management, we provide end-to-end real estate services designed to exceed your
+          From consulting to estate development and management, we provide end-to-end real estate services designed to exceed your
             expectations.
           </p>
         </motion.div>

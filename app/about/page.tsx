@@ -60,7 +60,7 @@ export default function AboutPage() {
               <span className="text-primary font-medium"> Excellence</span>
             </h1>
             <p className="text-lg text-muted-foreground leading-relaxed">
-              For nearly two decades, Prestige Estates has been the premier destination for luxury real estate in
+              For nearly two decades, Synergy Homes Limited has been the premier destination for luxury real estate in
               Nigeria, setting the standard for excellence in property services.
             </p>
           </motion.div>
@@ -81,7 +81,7 @@ export default function AboutPage() {
               <div className="aspect-[4/5] relative overflow-hidden">
                 <img
                   src="/luxury-real-estate-office-interior-with-elegant-de.jpg"
-                  alt="Prestige Estates Office"
+                  alt="Synergy Homes Limited Office"
                   className="object-cover w-full h-full"
                 />
               </div>
@@ -100,7 +100,7 @@ export default function AboutPage() {
               </h2>
               <div className="space-y-4 text-muted-foreground leading-relaxed">
                 <p>
-                  Prestige Estates was founded in 2005 with a singular vision: to redefine the luxury real estate
+                  Synergy Homes Limited was founded in 2005 with a singular vision: to redefine the luxury real estate
                   experience in Nigeria. What began as a small team of passionate professionals has grown into the
                   nation's most trusted name in premium property services.
                 </p>

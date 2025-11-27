@@ -20,7 +20,7 @@ export function AboutPreviewSection() {
             <div className="aspect-[4/5] relative overflow-hidden">
               <img
                 src="/elegant-modern-office-interior-with-luxury-furnitu.jpg"
-                alt="Prestige Estates Office"
+                alt="Synergy Homes Limited Office"
                 className="object-cover w-full h-full"
               />
             </div>
@@ -42,7 +42,7 @@ export function AboutPreviewSection() {
             </h2>
             <div className="space-y-4 text-muted-foreground leading-relaxed mb-8">
               <p>
-                For nearly two decades, Prestige Estates has been the premier destination for luxury real estate in the
+                For nearly two decades, Synergy Homes Limited has been the premier destination for luxury real estate in the
                 region. Our commitment to excellence and personalized service has earned us the trust of discerning
                 clients worldwide.
               </p>
@@ -55,9 +55,9 @@ export function AboutPreviewSection() {
             {/* Stats */}
             <div className="grid grid-cols-3 gap-6 mb-10">
               {[
-                { value: "18+", label: "Years Experience" },
-                { value: "500+", label: "Properties Sold" },
-                { value: "₦50B+", label: "In Transactions" },
+                { value: "6+", label: "Years Experience" },
+                { value: "100+", label: "Plots Sold" },
+                { value: "₦50M+", label: "In Transactions" },
               ].map((stat, index) => (
                 <div key={index} className="text-center lg:text-left">
                   <div className="text-3xl lg:text-4xl font-light text-primary mb-1">{stat.value}</div>

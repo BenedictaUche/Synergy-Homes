@@ -21,12 +21,12 @@ export async function generateMetadata({ params }: Props) {
 
   if (!investment) {
     return {
-      title: "Investment Not Found | Prestige Estates",
+      title: "Investment Not Found | Synergy Homes Limited",
     }
   }
 
   return {
-    title: `${investment.name} | Investment Opportunities | Prestige Estates`,
+    title: `${investment.name} | Investment Opportunities | Synergy Homes Limited`,
     description: investment.shortDescription,
   }
 }

@@ -21,12 +21,12 @@ export async function generateMetadata({ params }: Props) {
 
   if (!property) {
     return {
-      title: "Property Not Found | Prestige Estates",
+      title: "Property Not Found | Synergy Homes Limited",
     }
   }
 
   return {
-    title: `${property.name} | Prestige Estates`,
+    title: `${property.name} | Synergy Homes Limited`,
     description: property.shortDescription,
   }
 }

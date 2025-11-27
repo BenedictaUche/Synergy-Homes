@@ -181,7 +181,7 @@ export function PropertyDetails({ property }: PropertyDetailsProps) {
                     <img src="/placeholder.svg?height=56&width=56" alt="Agent" className="w-full h-full object-cover" />
                   </div>
                   <div>
-                    <div className="font-medium">Prestige Estates</div>
+                    <div className="font-medium">Synergy Homes Limited</div>
                     <div className="text-sm text-muted-foreground">Luxury Property Specialists</div>
                   </div>
                 </div>
@@ -194,11 +194,11 @@ export function PropertyDetails({ property }: PropertyDetailsProps) {
                     +234 123 456 7890
                   </a>
                   <a
-                    href="mailto:sales@prestigeestates.com"
+                    href="mailto:contact@synergyhomes.com.ng"
                     className="flex items-center gap-2 text-muted-foreground hover:text-foreground transition-colors"
                   >
                     <Mail size={14} />
-                    sales@prestigeestates.com
+                    contact@synergyhomes.com.ng
                   </a>
                 </div>
               </div>

@@ -18,22 +18,22 @@ const contactInfo = [
   {
     icon: MapPin,
     title: "Visit Us",
-    details: ["123 Prestige Avenue", "Victoria Island, Lagos", "Nigeria"],
+    details: ["9 Dopemu Road by Alluminium Village Akowonjo Road, Egbeda, Lagos"],
   },
   {
     icon: Phone,
     title: "Call Us",
-    details: ["+234 123 456 7890", "+234 098 765 4321"],
+    details: ["+2348033966285",],
   },
   {
     icon: Mail,
     title: "Email Us",
-    details: ["info@prestigeestates.com", "sales@prestigeestates.com"],
+    details: ["contact@synergyhomes.com.ng", "hello@synergyhomes.com.ng"],
   },
   {
     icon: Clock,
     title: "Working Hours",
-    details: ["Monday - Friday: 9AM - 6PM", "Saturday: 10AM - 4PM", "Sunday: By Appointment"],
+    details: ["Monday - Friday: 8AM - 5PM", "Saturday: By Appointment", "Sunday: By Appointment"],
   },
 ]
 

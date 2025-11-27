@@ -1,5 +1,5 @@
 import Link from "next/link"
-import { Mail, Phone, MapPin } from "lucide-react"
+import { Mail, Phone, MapPin, Facebook, Linkedin, Twitter, Instagram } from "lucide-react"
 
 const footerLinks = {
   company: [
@@ -16,6 +16,21 @@ const footerLinks = {
   ],
 }
 
+const socials = {
+  facebook: [
+    { href: "https://facebook.com/synergyhomes", icon: Facebook },
+  ],
+  instagram: [
+    { href: "https://instagram.com/synergyhomes", icon: Instagram },
+  ],
+  linkedin: [
+    { href: "https://linkedin.com/company/synergyhomes", icon: Linkedin },
+  ],
+  twitter: [
+    { href: "https://twitter.com/synergyhomes", icon: Twitter },
+  ],
+}
+
 export function Footer() {
   return (
     <footer className="bg-card border-t border-border">
@@ -25,8 +40,8 @@ export function Footer() {
           <div className="lg:col-span-1">
             <Link href="/" className="inline-block mb-6">
               <div className="flex flex-col">
-                <span className="text-2xl font-semibold tracking-wider text-primary">PRESTIGE</span>
-                <span className="text-xs tracking-[0.3em] text-muted-foreground -mt-1">ESTATES</span>
+                <span className="text-2xl font-semibold tracking-wider text-primary">SYNERGY HOMES</span>
+                <span className="text-xs tracking-[0.3em] text-muted-foreground -mt-1">LIMITED</span>
               </div>
             </Link>
             <p className="text-muted-foreground text-sm leading-relaxed mb-6 max-w-xs">
@@ -34,7 +49,7 @@ export function Footer() {
               since 2005.
             </p>
             <div className="flex gap-4">
-              {["facebook", "instagram", "linkedin", "twitter"].map((social) => (
+              {socials.map((social) => (
                 <a
                   key={social}
                   href={`https://${social}.com`}
@@ -90,9 +105,9 @@ export function Footer() {
               <li className="flex items-start gap-3">
                 <MapPin size={18} className="text-primary mt-0.5 shrink-0" />
                 <span className="text-sm text-muted-foreground">
-                  123 Prestige Avenue,
+                9 Dopemu Road by Alluminium Village Akowonjo Road,
                   <br />
-                  Victoria Island, Lagos
+                  Egbeda, Lagos
                 </span>
               </li>
               <li className="flex items-center gap-3">
@@ -107,10 +122,10 @@ export function Footer() {
               <li className="flex items-center gap-3">
                 <Mail size={18} className="text-primary shrink-0" />
                 <a
-                  href="mailto:info@prestigeestates.com"
+                  href="mailto:contact@synergyhomes.com.ng"
                   className="text-sm text-muted-foreground hover:text-foreground transition-colors"
                 >
-                  info@prestigeestates.com
+                  contact@synergyhomes.com.ng
                 </a>
               </li>
             </ul>
@@ -120,7 +135,7 @@ export function Footer() {
         {/* Bottom Bar */}
         <div className="mt-16 pt-8 border-t border-border flex flex-col md:flex-row justify-between items-center gap-4">
           <p className="text-xs text-muted-foreground">
-            © {new Date().getFullYear()} Prestige Estates. All rights reserved.
+            © {new Date().getFullYear()} Synergy Homes Limited. All rights reserved.
           </p>
           <p className="text-xs text-muted-foreground">Crafted with excellence for discerning clients.</p>
         </div>

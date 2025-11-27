@@ -11,8 +11,8 @@ export function LoadingScreen() {
           transition={{ duration: 1.5, repeat: Number.POSITIVE_INFINITY }}
           className="mb-4"
         >
-          <span className="text-3xl font-semibold tracking-wider text-primary">PRESTIGE</span>
-          <span className="block text-xs tracking-[0.3em] text-muted-foreground">ESTATES</span>
+          <span className="text-3xl font-semibold tracking-wider text-primary"></span>SYNERGY HOMES
+          <span className="block text-xs tracking-[0.3em] text-muted-foreground">LIMITED</span>
         </motion.div>
         <div className="flex gap-1 justify-center">
           {[0, 1, 2].map((i) => (

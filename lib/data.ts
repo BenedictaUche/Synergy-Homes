@@ -531,14 +531,14 @@ export const teamMembers: TeamMember[] = [
     id: "1",
     name: "Chief Adewale Johnson",
     position: "Founder & Chairman",
-    bio: "With over 30 years of experience in Nigerian real estate, Chief Johnson founded Prestige Estates with a vision to redefine luxury living. His leadership has guided the company to become one of the most trusted names in premium property.",
+    bio: "With over 30 years of experience in Nigerian real estate, Chief Johnson founded Synergy Homes Limited with a vision to redefine luxury living. His leadership has guided the company to become one of the most trusted names in premium property.",
     image: "/placeholder.svg?height=400&width=400",
   },
   {
     id: "2",
     name: "Mrs. Folake Adeyemi",
     position: "Chief Executive Officer",
-    bio: "Folake brings 20 years of executive experience in real estate development and finance. Under her leadership, Prestige Estates has expanded its portfolio and achieved record growth.",
+    bio: "Folake brings 20 years of executive experience in real estate development and finance. Under her leadership, Synergy Homes Limited has expanded its portfolio and achieved record growth.",
     image: "/placeholder.svg?height=400&width=400",
   },
   {
@@ -552,7 +552,7 @@ export const teamMembers: TeamMember[] = [
     id: "4",
     name: "Arc. Ngozi Eze",
     position: "Head of Design & Development",
-    bio: "An award-winning architect, Ngozi oversees all design and development projects. Her innovative approach ensures every Prestige property meets the highest standards of aesthetics and functionality.",
+    bio: "An award-winning architect, Ngozi oversees all design and development projects. Her innovative approach ensures every Synergy Homes property meets the highest standards of aesthetics and functionality.",
     image: "/placeholder.svg?height=400&width=400",
   },
 ]

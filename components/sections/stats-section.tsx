@@ -3,10 +3,10 @@
 import { motion } from "framer-motion"
 
 const stats = [
-  { value: "18", suffix: "+", label: "Years of Excellence" },
-  { value: "500", suffix: "+", label: "Properties Sold" },
+  { value: "6", suffix: "+", label: "Years of Excellence" },
+  { value: "200", suffix: "+", label: "Plots Sold" },
   { value: "98", suffix: "%", label: "Client Satisfaction" },
-  { value: "50", suffix: "B+", label: "Transaction Value" },
+  { value: "50", suffix: "M+", label: "Transaction Value" },
 ]
 
 export function StatsSection() {
