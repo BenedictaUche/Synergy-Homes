@@ -16,20 +16,12 @@ const footerLinks = {
   ],
 }
 
-const socials = {
-  facebook: [
-    { href: "https://facebook.com/synergyhomes", icon: Facebook },
-  ],
-  instagram: [
-    { href: "https://instagram.com/synergyhomes", icon: Instagram },
-  ],
-  linkedin: [
-    { href: "https://linkedin.com/company/synergyhomes", icon: Linkedin },
-  ],
-  twitter: [
-    { href: "https://twitter.com/synergyhomes", icon: Twitter },
-  ],
-}
+const socials = [
+  { href: "https://facebook.com/synergyhomes", icon: Facebook, label: "Facebook" },
+  { href: "https://instagram.com/synergyhomes", icon: Instagram, label: "Instagram" },
+  { href: "https://linkedin.com/company/synergyhomes", icon: Linkedin, label: "LinkedIn" },
+  { href: "https://twitter.com/synergyhomes", icon: Twitter, label: "Twitter" },
+]
 
 export function Footer() {
   return (
@@ -49,18 +41,21 @@ export function Footer() {
               since 2005.
             </p>
             <div className="flex gap-4">
-              {socials.map((social) => (
-                <a
-                  key={social}
-                  href={`https://${social}.com`}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="w-10 h-10 flex items-center justify-center border border-border hover:border-primary hover:text-primary transition-colors"
-                  aria-label={social}
-                >
-                  <span className="text-xs uppercase tracking-wider">{social[0]}</span>
-                </a>
-              ))}
+              {socials.map((social) => {
+                const Icon = social.icon
+                return (
+                  <a
+                    key={social.label}
+                    href={social.href}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="w-10 h-10 flex items-center justify-center border border-border hover:border-primary hover:text-primary transition-colors"
+                    aria-label={social.label}
+                  >
+                    <Icon size={18} />
+                  </a>
+                )
+              })}
             </div>
           </div>
 
@@ -105,7 +100,7 @@ export function Footer() {
               <li className="flex items-start gap-3">
                 <MapPin size={18} className="text-primary mt-0.5 shrink-0" />
                 <span className="text-sm text-muted-foreground">
-                9 Dopemu Road by Alluminium Village Akowonjo Road,
+                  9 Dopemu Road by Alluminium Village Akowonjo Road,
                   <br />
                   Egbeda, Lagos
                 </span>
