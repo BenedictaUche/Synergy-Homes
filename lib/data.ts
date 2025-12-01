@@ -529,32 +529,32 @@ export const investments: Investment[] = [
 export const teamMembers: TeamMember[] = [
   {
     id: "1",
-    name: "Chief Adewale Johnson",
-    position: "Founder & Chairman",
-    bio: "With over 30 years of experience in Nigerian real estate, Chief Johnson founded Synergy Homes Limited with a vision to redefine luxury living. His leadership has guided the company to become one of the most trusted names in premium property.",
+    name: "Alexander Ekwueme Onyekwere",
+    position: "CEO/MD",
+    bio: "With over 15 years in real estate, Alexander has spearheaded numerous successful developments and investments across Nigeria. His visionary leadership drives Synergy Homes Limited's mission to deliver exceptional properties and investment opportunities.",
     image: "/placeholder.svg?height=400&width=400",
   },
   {
     id: "2",
-    name: "Mrs. Folake Adeyemi",
-    position: "Chief Executive Officer",
-    bio: "Folake brings 20 years of executive experience in real estate development and finance. Under her leadership, Synergy Homes Limited has expanded its portfolio and achieved record growth.",
+    name: "Adeniyi Jacob",
+    position: "Chief Business Analyst",
+    bio: "Jacob is a seasoned business analyst with expertise in real estate market trends and investment strategies. He plays a crucial role in identifying lucrative opportunities and ensuring the company's growth trajectory.",
     image: "/placeholder.svg?height=400&width=400",
   },
   {
     id: "3",
-    name: "Mr. Chukwuemeka Obi",
-    position: "Director of Sales",
-    bio: "Emeka leads our sales team with passion and expertise, having closed over ₦50 billion in property transactions. His client-first approach has earned him recognition as one of Nigeria's top real estate professionals.",
+    name: "Ahmed Ajibade",
+    position: "Brand Manager",
+    bio: "Ajibade is a seasoned marketing professional with a decade of experience in real estate branding. He has successfully elevated Synergy Homes Limited's market presence through innovative campaigns and strategic partnerships.",
     image: "/placeholder.svg?height=400&width=400",
   },
-  {
-    id: "4",
-    name: "Arc. Ngozi Eze",
-    position: "Head of Design & Development",
-    bio: "An award-winning architect, Ngozi oversees all design and development projects. Her innovative approach ensures every Synergy Homes property meets the highest standards of aesthetics and functionality.",
-    image: "/placeholder.svg?height=400&width=400",
-  },
+  // {
+  //   id: "4",
+  //   name: "Arc. Ngozi Eze",
+  //   position: "Head of Design & Development",
+  //   bio: "An award-winning architect, Ngozi oversees all design and development projects. Her innovative approach ensures every Synergy Homes property meets the highest standards of aesthetics and functionality.",
+  //   image: "/placeholder.svg?height=400&width=400",
+  // },
 ]
 
 export const services: Service[] = [
