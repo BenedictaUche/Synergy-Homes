@@ -7,7 +7,7 @@ import { Footer } from "@/components/footer"
 import { WhatsAppButton } from "@/components/whatsapp-button"
 import { PropertyCard } from "@/components/property-card"
 import { PropertyFilters, type FilterState } from "@/components/property-filters"
-import { properties } from "@/lib/data"
+import { landParcels } from "@/lib/data"
 
 export default function PropertiesPage() {
   const [filters, setFilters] = useState<FilterState>({
@@ -19,20 +19,21 @@ export default function PropertiesPage() {
     status: "all",
   })
 
-  const filteredProperties = useMemo(() => {
-    return properties.filter((property) => {
+  const filteredLandParcels = useMemo(() => {
+    return landParcels.filter((land) => {
       // Search filter
       if (filters.search) {
         const searchLower = filters.search.toLowerCase()
         const matchesSearch =
-          property.name.toLowerCase().includes(searchLower) ||
-          property.location.toLowerCase().includes(searchLower) ||
-          property.description.toLowerCase().includes(searchLower)
+          land.name.toLowerCase().includes(searchLower) ||
+          land.location.toLowerCase().includes(searchLower) ||
+          land.description.toLowerCase().includes(searchLower) ||
+          land.sizeFormatted.toLowerCase().includes(searchLower)
         if (!matchesSearch) return false
       }
 
-      // Property type filter
-      if (filters.propertyType !== "all" && property.propertyType !== filters.propertyType) {
+      // Land use type filter (maps to propertyType)
+      if (filters.propertyType !== "all" && land.landUse !== filters.propertyType) {
         return false
       }
 
@@ -42,17 +43,17 @@ export default function PropertiesPage() {
           "victoria-island": ["victoria island"],
           "banana-island": ["banana island"],
           ikoyi: ["ikoyi"],
-          lekki: ["lekki"],
-          abuja: ["abuja", "maitama"],
+          lekki: ["lekki", "ajah", "ibeju-lekki", "epe"],
+          abuja: ["abuja", "maitama", "gwarinpa", "cbd"],
         }
         const locationKeywords = locationMap[filters.location] || []
-        const matchesLocation = locationKeywords.some((keyword) => property.location.toLowerCase().includes(keyword))
+        const matchesLocation = locationKeywords.some((keyword) => land.location.toLowerCase().includes(keyword))
         if (!matchesLocation) return false
       }
 
       // Price range filter
       if (filters.priceRange !== "all") {
-        const priceInMillions = property.price / 1000000
+        const priceInMillions = land.price / 1000000
         switch (filters.priceRange) {
           case "0-500":
             if (priceInMillions >= 500) return false
@@ -69,10 +70,9 @@ export default function PropertiesPage() {
         }
       }
 
-      // Beds filter
-      if (filters.beds !== "all") {
-        const minBeds = Number.parseInt(filters.beds)
-        if (property.beds < minBeds) return false
+      // Status filter
+      if (filters.status !== "all" && land.status !== filters.status) {
+        return false
       }
 
       return true
@@ -94,18 +94,18 @@ export default function PropertiesPage() {
           >
             <span className="text-primary text-sm tracking-[0.3em] mb-4 block">OUR PORTFOLIO</span>
             <h1 className="text-4xl md:text-5xl lg:text-6xl font-light mb-6">
-              Exceptional
-              <span className="text-primary font-medium"> Properties</span>
+              Premium
+              <span className="text-primary font-medium"> Land Parcels</span>
             </h1>
             <p className="text-lg text-muted-foreground leading-relaxed">
-              Explore our curated collection of luxury properties, each selected to meet the highest standards of
-              quality, location, and investment potential.
+              Explore our curated collection of prime land parcels across Nigeria, each selected to meet the highest standards of
+              location, documentation, and investment potential.
             </p>
           </motion.div>
         </div>
       </section>
 
-      {/* Properties Section */}
+      {/* Land Parcels Section */}
       <section className="py-16 lg:py-24 bg-background">
         <div className="container mx-auto px-6 lg:px-12">
           <PropertyFilters onFilterChange={setFilters} />
@@ -113,20 +113,20 @@ export default function PropertiesPage() {
           {/* Results Count */}
           <div className="mb-8">
             <p className="text-sm text-muted-foreground">
-              Showing {filteredProperties.length} {filteredProperties.length === 1 ? "property" : "properties"}
+              Showing {filteredLandParcels.length} {filteredLandParcels.length === 1 ? "land parcel" : "land parcels"}
             </p>
           </div>
 
-          {/* Properties Grid */}
-          {filteredProperties.length > 0 ? (
+          {/* Land Parcels Grid */}
+          {filteredLandParcels.length > 0 ? (
             <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-              {filteredProperties.map((property, index) => (
-                <PropertyCard key={property.id} property={property} index={index} />
+              {filteredLandParcels.map((land, index) => (
+                <PropertyCard key={land.id} property={land} index={index} />
               ))}
             </div>
           ) : (
             <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="text-center py-20">
-              <p className="text-xl text-muted-foreground mb-4">No properties match your criteria</p>
+              <p className="text-xl text-muted-foreground mb-4">No land parcels match your criteria</p>
               <p className="text-sm text-muted-foreground">Try adjusting your filters or search terms</p>
             </motion.div>
           )}

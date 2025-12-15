@@ -20,13 +20,13 @@ export interface FilterState {
   status: string
 }
 
-const propertyTypes = [
-  { value: "all", label: "All Types" },
-  { value: "penthouse", label: "Penthouse" },
-  { value: "villa", label: "Villa" },
-  { value: "mansion", label: "Mansion" },
-  { value: "apartment", label: "Apartment" },
-  { value: "estate", label: "Estate" },
+const landUseTypes = [
+  { value: "all", label: "All Land Types" },
+  { value: "residential", label: "Residential" },
+  { value: "commercial", label: "Commercial" },
+  { value: "mixed-use", label: "Mixed-Use" },
+  { value: "agricultural", label: "Agricultural" },
+  { value: "industrial", label: "Industrial" },
 ]
 
 const locations = [
@@ -34,24 +34,33 @@ const locations = [
   { value: "victoria-island", label: "Victoria Island" },
   { value: "banana-island", label: "Banana Island" },
   { value: "ikoyi", label: "Ikoyi" },
-  { value: "lekki", label: "Lekki" },
+  { value: "lekki", label: "Lekki / Ajah / Ibeju-Lekki" },
   { value: "abuja", label: "Abuja" },
 ]
 
 const priceRanges = [
   { value: "all", label: "Any Price" },
-  { value: "0-500", label: "Under ₦500M" },
-  { value: "500-800", label: "₦500M - ₦800M" },
-  { value: "800-1000", label: "₦800M - ₦1B" },
+  { value: "0-100", label: "Under ₦100M" },
+  { value: "100-300", label: "₦100M - ₦300M" },
+  { value: "300-500", label: "₦300M - ₦500M" },
+  { value: "500-1000", label: "₦500M - ₦1B" },
   { value: "1000+", label: "Over ₦1B" },
 ]
 
-const bedOptions = [
-  { value: "all", label: "Any Beds" },
-  { value: "3", label: "3+ Beds" },
-  { value: "4", label: "4+ Beds" },
-  { value: "5", label: "5+ Beds" },
-  { value: "6", label: "6+ Beds" },
+const sizeOptions = [
+  { value: "all", label: "Any Size" },
+  { value: "0-1000", label: "Under 1,000 sqm" },
+  { value: "1000-2500", label: "1,000 - 2,500 sqm" },
+  { value: "2500-5000", label: "2,500 - 5,000 sqm (0.6+ acres)" },
+  { value: "5000-10000", label: "5,000 - 10,000 sqm (1+ acres)" },
+  { value: "10000+", label: "Over 10,000 sqm (2.5+ acres)" },
+]
+
+const statusOptions = [
+  { value: "all", label: "All Status" },
+  { value: "available", label: "Available" },
+  { value: "reserved", label: "Reserved" },
+  { value: "sold", label: "Sold" },
 ]
 
 export function PropertyFilters({ onFilterChange }: PropertyFiltersProps) {
@@ -61,7 +70,7 @@ export function PropertyFilters({ onFilterChange }: PropertyFiltersProps) {
     propertyType: "all",
     location: "all",
     priceRange: "all",
-    beds: "all",
+    beds: "all", // Repurposed for size
     status: "all",
   })
 
@@ -96,7 +105,7 @@ export function PropertyFilters({ onFilterChange }: PropertyFiltersProps) {
           <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-muted-foreground" size={20} />
           <Input
             type="text"
-            placeholder="Search properties..."
+            placeholder="Search land parcels by name, location, or size..."
             value={filters.search}
             onChange={(e) => updateFilter("search", e.target.value)}
             className="pl-12 h-12 bg-card border-border"
@@ -123,13 +132,13 @@ export function PropertyFilters({ onFilterChange }: PropertyFiltersProps) {
         <div className="p-6 bg-card border border-border">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-4">
             <div>
-              <label className="text-xs tracking-wider text-muted-foreground mb-2 block">PROPERTY TYPE</label>
+              <label className="text-xs tracking-wider text-muted-foreground mb-2 block">LAND USE TYPE</label>
               <Select value={filters.propertyType} onValueChange={(v) => updateFilter("propertyType", v)}>
                 <SelectTrigger className="bg-background border-border">
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
-                  {propertyTypes.map((type) => (
+                  {landUseTypes.map((type) => (
                     <SelectItem key={type.value} value={type.value}>
                       {type.label}
                     </SelectItem>
@@ -171,15 +180,31 @@ export function PropertyFilters({ onFilterChange }: PropertyFiltersProps) {
             </div>
 
             <div>
-              <label className="text-xs tracking-wider text-muted-foreground mb-2 block">BEDROOMS</label>
+              <label className="text-xs tracking-wider text-muted-foreground mb-2 block">LAND SIZE</label>
               <Select value={filters.beds} onValueChange={(v) => updateFilter("beds", v)}>
                 <SelectTrigger className="bg-background border-border">
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
-                  {bedOptions.map((bed) => (
-                    <SelectItem key={bed.value} value={bed.value}>
-                      {bed.label}
+                  {sizeOptions.map((size) => (
+                    <SelectItem key={size.value} value={size.value}>
+                      {size.label}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+
+            <div>
+              <label className="text-xs tracking-wider text-muted-foreground mb-2 block">STATUS</label>
+              <Select value={filters.status} onValueChange={(v) => updateFilter("status", v)}>
+                <SelectTrigger className="bg-background border-border">
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  {statusOptions.map((status) => (
+                    <SelectItem key={status.value} value={status.value}>
+                      {status.label}
                     </SelectItem>
                   ))}
                 </SelectContent>

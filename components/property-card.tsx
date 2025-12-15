@@ -2,16 +2,16 @@
 
 import { motion } from "framer-motion"
 import Link from "next/link"
-import { MapPin, Bed, Bath, Square } from "lucide-react"
-import type { Property } from "@/lib/data"
+import { MapPin, Maximize2, Compass, FileText } from "lucide-react"
+import type { LandParcel } from "@/lib/data"
 
-interface PropertyCardProps {
-  property: Property
+interface LandParcelCardProps {
+  property: LandParcel
   index?: number
   variant?: "default" | "featured"
 }
 
-export function PropertyCard({ property, index = 0, variant = "default" }: PropertyCardProps) {
+export function PropertyCard({ property, index = 0, variant = "default" }: LandParcelCardProps) {
   const isFeatured = variant === "featured"
 
   return (
@@ -62,13 +62,13 @@ export function PropertyCard({ property, index = 0, variant = "default" }: Prope
               </div>
               <div className="flex items-center gap-6 text-sm text-muted-foreground mb-4">
                 <span className="flex items-center gap-1">
-                  <Bed size={14} /> {property.beds} Beds
+                  <Maximize2 size={14} /> {property.sizeFormatted}
                 </span>
                 <span className="flex items-center gap-1">
-                  <Bath size={14} /> {property.baths} Baths
+                  <Compass size={14} /> {property.landUse}
                 </span>
                 <span className="flex items-center gap-1">
-                  <Square size={14} /> {property.sqft.toLocaleString()} sqft
+                  <FileText size={14} /> {property.documentationType}
                 </span>
               </div>
               <div className="text-2xl text-primary font-medium">{property.priceFormatted}</div>
@@ -86,13 +86,13 @@ export function PropertyCard({ property, index = 0, variant = "default" }: Prope
             </div>
             <div className="flex items-center gap-4 text-xs text-muted-foreground mb-3">
               <span className="flex items-center gap-1">
-                <Bed size={12} /> {property.beds}
+                <Maximize2 size={12} /> {property.sizeFormatted}
+              </span>
+              <span className="flex items-center gap-1 capitalize">
+                <Compass size={12} /> {property.landUse}
               </span>
               <span className="flex items-center gap-1">
-                <Bath size={12} /> {property.baths}
-              </span>
-              <span className="flex items-center gap-1">
-                <Square size={12} /> {property.sqft.toLocaleString()}
+                <FileText size={12} /> {property.documentationType}
               </span>
             </div>
             <div className="text-lg text-primary font-medium">{property.priceFormatted}</div>

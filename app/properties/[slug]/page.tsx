@@ -3,46 +3,46 @@ import { Navigation } from "@/components/navigation"
 import { Footer } from "@/components/footer"
 import { WhatsAppButton } from "@/components/whatsapp-button"
 import { PropertyDetails } from "./property-details"
-import { getPropertyBySlug, properties } from "@/lib/data"
+import { getLandParcelBySlug, landParcels } from "@/lib/data"
 
 interface Props {
   params: Promise<{ slug: string }>
 }
 
 export async function generateStaticParams() {
-  return properties.map((property) => ({
-    slug: property.slug,
+  return landParcels.map((land) => ({
+    slug: land.slug,
   }))
 }
 
 export async function generateMetadata({ params }: Props) {
   const { slug } = await params
-  const property = getPropertyBySlug(slug)
+  const land = getLandParcelBySlug(slug)
 
-  if (!property) {
+  if (!land) {
     return {
-      title: "Property Not Found | Synergy Homes Limited",
+      title: "Land Not Found | Synergy Homes Limited",
     }
   }
 
   return {
-    title: `${property.name} | Synergy Homes Limited`,
-    description: property.shortDescription,
+    title: `${land.name} | Synergy Homes Limited`,
+    description: land.shortDescription,
   }
 }
 
 export default async function PropertyPage({ params }: Props) {
   const { slug } = await params
-  const property = getPropertyBySlug(slug)
+  const land = getLandParcelBySlug(slug)
 
-  if (!property) {
+  if (!land) {
     notFound()
   }
 
   return (
     <main className="min-h-screen">
       <Navigation />
-      <PropertyDetails property={property} />
+      <PropertyDetails property={land} />
       <Footer />
       <WhatsAppButton />
     </main>

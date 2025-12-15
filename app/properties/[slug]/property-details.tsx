@@ -2,20 +2,27 @@
 
 import { motion } from "framer-motion"
 import Link from "next/link"
-import { MapPin, Bed, Bath, Square, Calendar, Home, Check, Phone, Mail, ArrowLeft, Play, Share2 } from "lucide-react"
+import { MapPin, Maximize2, Compass, FileText, Calendar, Layers, Check, Phone, Mail, ArrowLeft, Play, Share2 } from "lucide-react"
 import { ImageGallery } from "@/components/image-gallery"
 import { Button } from "@/components/ui/button"
-import type { Property } from "@/lib/data"
+import type { LandParcel } from "@/lib/data"
 
-interface PropertyDetailsProps {
-  property: Property
+interface LandParcelDetailsProps {
+  property: LandParcel
 }
 
-export function PropertyDetails({ property }: PropertyDetailsProps) {
+export function PropertyDetails({ property }: LandParcelDetailsProps) {
   const statusColors = {
     available: "bg-green-500/20 text-green-400",
     sold: "bg-red-500/20 text-red-400",
-    pending: "bg-yellow-500/20 text-yellow-400",
+    reserved: "bg-yellow-500/20 text-yellow-400",
+  }
+
+  const topographyLabels = {
+    flat: "Flat Terrain",
+    "gently-sloping": "Gently Sloping",
+    hilly: "Hilly Terrain",
+    waterfront: "Waterfront",
   }
 
   return (
@@ -27,7 +34,7 @@ export function PropertyDetails({ property }: PropertyDetailsProps) {
           className="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors"
         >
           <ArrowLeft size={16} />
-          Back to Properties
+          Back to Land Parcels
         </Link>
       </div>
 
@@ -36,7 +43,7 @@ export function PropertyDetails({ property }: PropertyDetailsProps) {
         <ImageGallery images={property.images} title={property.name} />
       </div>
 
-      {/* Property Info */}
+      {/* Land Parcel Info */}
       <div className="container mx-auto px-6 lg:px-12">
         <div className="grid lg:grid-cols-3 gap-12">
           {/* Main Content */}
@@ -48,7 +55,7 @@ export function PropertyDetails({ property }: PropertyDetailsProps) {
                   <span className={`px-3 py-1 text-xs tracking-wider uppercase ${statusColors[property.status]}`}>
                     {property.status}
                   </span>
-                  <span className="px-3 py-1 bg-card text-xs tracking-wider uppercase">{property.propertyType}</span>
+                  <span className="px-3 py-1 bg-card text-xs tracking-wider uppercase capitalize">{property.landUse}</span>
                   {property.investmentSuitable && (
                     <span className="px-3 py-1 bg-primary/20 text-primary text-xs tracking-wider">
                       INVESTMENT SUITABLE
@@ -65,36 +72,36 @@ export function PropertyDetails({ property }: PropertyDetailsProps) {
               {/* Quick Stats */}
               <div className="grid grid-cols-2 md:grid-cols-4 gap-4 p-6 bg-card border border-border mb-8">
                 <div className="text-center">
-                  <Bed className="w-6 h-6 mx-auto mb-2 text-primary" />
-                  <div className="text-2xl font-light">{property.beds}</div>
-                  <div className="text-xs text-muted-foreground">Bedrooms</div>
+                  <Maximize2 className="w-6 h-6 mx-auto mb-2 text-primary" />
+                  <div className="text-2xl font-light">{property.sizeFormatted.split('(')[0].trim()}</div>
+                  <div className="text-xs text-muted-foreground">Land Size</div>
                 </div>
                 <div className="text-center">
-                  <Bath className="w-6 h-6 mx-auto mb-2 text-primary" />
-                  <div className="text-2xl font-light">{property.baths}</div>
-                  <div className="text-xs text-muted-foreground">Bathrooms</div>
+                  <Compass className="w-6 h-6 mx-auto mb-2 text-primary" />
+                  <div className="text-2xl font-light capitalize">{property.landUse}</div>
+                  <div className="text-xs text-muted-foreground">Land Use</div>
                 </div>
                 <div className="text-center">
-                  <Square className="w-6 h-6 mx-auto mb-2 text-primary" />
-                  <div className="text-2xl font-light">{property.sqft.toLocaleString()}</div>
-                  <div className="text-xs text-muted-foreground">Sq Ft</div>
+                  <Layers className="w-6 h-6 mx-auto mb-2 text-primary" />
+                  <div className="text-2xl font-light">{topographyLabels[property.topography]}</div>
+                  <div className="text-xs text-muted-foreground">Topography</div>
                 </div>
                 <div className="text-center">
-                  <Calendar className="w-6 h-6 mx-auto mb-2 text-primary" />
-                  <div className="text-2xl font-light">{property.yearBuilt}</div>
-                  <div className="text-xs text-muted-foreground">Year Built</div>
+                  <FileText className="w-6 h-6 mx-auto mb-2 text-primary" />
+                  <div className="text-2xl font-light">{property.documentationType}</div>
+                  <div className="text-xs text-muted-foreground">Title</div>
                 </div>
               </div>
 
               {/* Description */}
               <div className="mb-10">
-                <h2 className="text-xl font-medium mb-4">About This Property</h2>
+                <h2 className="text-xl font-medium mb-4">About This Land</h2>
                 <p className="text-muted-foreground leading-relaxed">{property.description}</p>
               </div>
 
               {/* Features */}
               <div className="mb-10">
-                <h2 className="text-xl font-medium mb-4">Features</h2>
+                <h2 className="text-xl font-medium mb-4">Land Features</h2>
                 <div className="grid md:grid-cols-2 gap-3">
                   {property.features.map((feature, index) => (
                     <div key={index} className="flex items-center gap-3">
@@ -105,14 +112,14 @@ export function PropertyDetails({ property }: PropertyDetailsProps) {
                 </div>
               </div>
 
-              {/* Amenities */}
+              {/* Infrastructure */}
               <div className="mb-10">
-                <h2 className="text-xl font-medium mb-4">Amenities</h2>
+                <h2 className="text-xl font-medium mb-4">Infrastructure & Access</h2>
                 <div className="grid md:grid-cols-2 gap-3">
-                  {property.amenities.map((amenity, index) => (
+                  {property.infrastructure.map((item, index) => (
                     <div key={index} className="flex items-center gap-3">
-                      <Home size={16} className="text-primary shrink-0" />
-                      <span className="text-muted-foreground">{amenity}</span>
+                      <Check size={16} className="text-primary shrink-0" />
+                      <span className="text-muted-foreground">{item}</span>
                     </div>
                   ))}
                 </div>
@@ -121,7 +128,7 @@ export function PropertyDetails({ property }: PropertyDetailsProps) {
               {/* Video */}
               {property.videoUrl && (
                 <div className="mb-10">
-                  <h2 className="text-xl font-medium mb-4">Property Video</h2>
+                  <h2 className="text-xl font-medium mb-4">Site Video</h2>
                   <a
                     href={property.videoUrl}
                     target="_blank"
@@ -132,8 +139,8 @@ export function PropertyDetails({ property }: PropertyDetailsProps) {
                       <Play size={24} />
                     </div>
                     <div>
-                      <div className="font-medium">Watch Property Tour</div>
-                      <div className="text-sm text-muted-foreground">View the full video walkthrough</div>
+                      <div className="font-medium">Watch Site Tour</div>
+                      <div className="text-sm text-muted-foreground">View the full video walkthrough of the land</div>
                     </div>
                   </a>
                 </div>
@@ -157,7 +164,7 @@ export function PropertyDetails({ property }: PropertyDetailsProps) {
                 <div className="space-y-3">
                   <Button className="w-full h-12 bg-primary text-primary-foreground hover:bg-primary/90">
                     <Phone size={18} className="mr-2" />
-                    Schedule Viewing
+                    Schedule Site Visit
                   </Button>
                   <Button
                     variant="outline"
@@ -168,7 +175,7 @@ export function PropertyDetails({ property }: PropertyDetailsProps) {
                   </Button>
                   <Button variant="ghost" className="w-full h-12 text-muted-foreground hover:text-foreground">
                     <Share2 size={18} className="mr-2" />
-                    Share Property
+                    Share Land
                   </Button>
                 </div>
               </div>
@@ -182,7 +189,7 @@ export function PropertyDetails({ property }: PropertyDetailsProps) {
                   </div>
                   <div>
                     <div className="font-medium">Synergy Homes Limited</div>
-                    <div className="text-sm text-muted-foreground">Luxury Property Specialists</div>
+                    <div className="text-sm text-muted-foreground">Premium Land Specialists</div>
                   </div>
                 </div>
                 <div className="space-y-2 text-sm">
