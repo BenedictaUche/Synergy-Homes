@@ -2,10 +2,22 @@
 
 import { motion } from "framer-motion"
 import Link from "next/link"
-import { MapPin, TrendingUp, Clock, Check, AlertCircle, ArrowLeft, Phone, Mail } from "lucide-react"
+import { MapPin, TrendingUp, Clock, Check, AlertCircle, ArrowLeft, Phone, Mail, Download } from "lucide-react"
 import { ImageGallery } from "@/components/image-gallery"
 import { Button } from "@/components/ui/button"
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion"
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog"
+import { Input } from "@/components/ui/input"
+import { Label } from "@/components/ui/label"
+import { Textarea } from "@/components/ui/textarea"
+import { useState } from "react"
 import type { Investment } from "@/lib/data"
 
 interface InvestmentDetailsProps {
@@ -13,6 +25,12 @@ interface InvestmentDetailsProps {
 }
 
 export function InvestmentDetails({ investment }: InvestmentDetailsProps) {
+  const [isInterestOpen, setIsInterestOpen] = useState(false)
+  const [isWaitlistOpen, setIsWaitlistOpen] = useState(false)
+  const [isSubmitting, setIsSubmitting] = useState(false)
+  const [submitSuccess, setSubmitSuccess] = useState(false)
+  const [error, setError] = useState("")
+
   const statusStyles = {
     open: "bg-green-500/20 text-green-400",
     closed: "bg-red-500/20 text-red-400",
@@ -24,6 +42,122 @@ export function InvestmentDetails({ investment }: InvestmentDetailsProps) {
     commercial: "Commercial Development",
     "mixed-use": "Mixed-Use Development",
     land: "Land Investment",
+  }
+
+  const handleInterestSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault()
+    setIsSubmitting(true)
+    setError("")
+
+    const formData = new FormData(e.currentTarget)
+    const data = {
+      investmentName: investment.name,
+      name: formData.get("name"),
+      email: formData.get("email"),
+      phone: formData.get("phone"),
+      amount: formData.get("amount"),
+      message: formData.get("message"),
+    }
+
+    try {
+      const response = await fetch('/api/investment-interest', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data)
+      })
+
+      const result = await response.json()
+
+      if (!response.ok) {
+        throw new Error(result.error || 'Failed to submit interest')
+      }
+
+      setSubmitSuccess(true)
+      setTimeout(() => {
+        setIsInterestOpen(false)
+        setSubmitSuccess(false)
+        // Reset form
+        e.currentTarget?.reset()
+      }, 2500)
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Something went wrong')
+    } finally {
+      setIsSubmitting(false)
+    }
+  }
+
+  const handleWaitlistSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault()
+    setIsSubmitting(true)
+    setError("")
+
+    const formData = new FormData(e.currentTarget)
+    const data = {
+      investmentName: investment.name,
+      name: formData.get("name"),
+      email: formData.get("email"),
+      phone: formData.get("phone"),
+    }
+
+    try {
+      const response = await fetch('/api/waitlist', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data)
+      })
+
+      const result = await response.json()
+
+      if (!response.ok) {
+        throw new Error(result.error || 'Failed to join waitlist')
+      }
+
+      setSubmitSuccess(true)
+      setTimeout(() => {
+        setIsWaitlistOpen(false)
+        setSubmitSuccess(false)
+        e.currentTarget.reset()
+      }, 2500)
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Something went wrong')
+    } finally {
+      setIsSubmitting(false)
+    }
+  }
+
+  const handleDownloadProspectus = async () => {
+    try {
+      // Prompt for email if user wants to receive via email
+      const userEmail = prompt("Enter your email to receive the prospectus:")
+      const userName = prompt("Enter your name:")
+
+      if (userEmail && userName) {
+        const response = await fetch('/api/generate-prospectus', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            investmentName: investment.name,
+            investmentSlug: investment.slug,
+            userEmail,
+            userName
+          })
+        })
+
+        const result = await response.json()
+
+        if (response.ok) {
+          alert(`Prospectus will be sent to ${userEmail} shortly. Check your inbox!`)
+        } else {
+          throw new Error(result.error)
+        }
+      } else {
+        // Try direct download
+        window.open(`/prospectus/${investment.slug}.pdf`, '_blank')
+      }
+    } catch (err) {
+      console.error('Download error:', err)
+      alert('Unable to download prospectus. Please contact us at contact@synergyhomes.com.ng')
+    }
   }
 
   return (
@@ -161,20 +295,145 @@ export function InvestmentDetails({ investment }: InvestmentDetailsProps) {
                 <div className="space-y-3">
                   {investment.status === "open" ? (
                     <>
-                      <Button className="w-full h-12 bg-primary text-primary-foreground hover:bg-primary/90">
-                        Express Interest
-                      </Button>
+                      <Dialog open={isInterestOpen} onOpenChange={setIsInterestOpen}>
+                        <DialogTrigger asChild>
+                          <Button className="w-full h-12 bg-primary text-primary-foreground hover:bg-primary/90">
+                            Express Interest
+                          </Button>
+                        </DialogTrigger>
+                        <DialogContent className="sm:max-w-[500px]">
+                          <DialogHeader>
+                            <DialogTitle>Express Your Interest</DialogTitle>
+                            <DialogDescription>
+                              Fill out the form below and our investment team will contact you within 24 hours.
+                            </DialogDescription>
+                          </DialogHeader>
+                          {submitSuccess ? (
+                            <div className="py-8 text-center">
+                              <div className="w-16 h-16 bg-green-500/20 text-green-500 rounded-full flex items-center justify-center mx-auto mb-4">
+                                <Check size={32} />
+                              </div>
+                              <h3 className="text-lg font-medium mb-2">Thank You!</h3>
+                              <p className="text-muted-foreground">
+                                We've received your interest. Check your email for confirmation and next steps.
+                              </p>
+                            </div>
+                          ) : (
+                            <form onSubmit={handleInterestSubmit} className="space-y-4">
+                              {error && (
+                                <div className="p-3 bg-red-500/10 border border-red-500/20 text-red-500 text-sm rounded">
+                                  {error}
+                                </div>
+                              )}
+                              <div className="space-y-2">
+                                <Label htmlFor="name">Full Name *</Label>
+                                <Input id="name" name="name" placeholder="John Doe" required />
+                              </div>
+                              <div className="space-y-2">
+                                <Label htmlFor="email">Email Address *</Label>
+                                <Input id="email" name="email" type="email" placeholder="john@example.com" required />
+                              </div>
+                              <div className="space-y-2">
+                                <Label htmlFor="phone">Phone Number *</Label>
+                                <Input id="phone" name="phone" type="tel" placeholder="+234 800 000 0000" required />
+                              </div>
+                              <div className="space-y-2">
+                                <Label htmlFor="amount">Intended Investment Amount (₦)</Label>
+                                <Input
+                                  id="amount"
+                                  name="amount"
+                                  type="number"
+                                  placeholder="5000000"
+                                  min={investment.minInvestment}
+                                />
+                              </div>
+                              <div className="space-y-2">
+                                <Label htmlFor="message">Additional Information</Label>
+                                <Textarea
+                                  id="message"
+                                  name="message"
+                                  placeholder="Tell us about your investment goals..."
+                                  rows={3}
+                                />
+                              </div>
+                              <Button type="submit" className="w-full" disabled={isSubmitting}>
+                                {isSubmitting ? "Submitting..." : "Submit Interest"}
+                              </Button>
+                            </form>
+                          )}
+                        </DialogContent>
+                      </Dialog>
                       <Button
                         variant="outline"
                         className="w-full h-12 border-border hover:border-primary hover:text-primary bg-transparent"
+                        onClick={handleDownloadProspectus}
                       >
+                        <Download size={16} className="mr-2" />
                         Download Prospectus
                       </Button>
                     </>
                   ) : investment.status === "coming-soon" ? (
-                    <Button className="w-full h-12 bg-primary text-primary-foreground hover:bg-primary/90">
-                      Join Waitlist
-                    </Button>
+                    <Dialog open={isWaitlistOpen} onOpenChange={setIsWaitlistOpen}>
+                      <DialogTrigger asChild>
+                        <Button className="w-full h-12 bg-primary text-primary-foreground hover:bg-primary/90">
+                          Join Waitlist
+                        </Button>
+                      </DialogTrigger>
+                      <DialogContent className="sm:max-w-[500px]">
+                        <DialogHeader>
+                          <DialogTitle>Join the Waitlist</DialogTitle>
+                          <DialogDescription>
+                            Be the first to know when this investment opportunity opens. We'll notify you via email and SMS.
+                          </DialogDescription>
+                        </DialogHeader>
+                        {submitSuccess ? (
+                          <div className="py-8 text-center">
+                            <div className="w-16 h-16 bg-green-500/20 text-green-500 rounded-full flex items-center justify-center mx-auto mb-4">
+                              <Check size={32} />
+                            </div>
+                            <h3 className="text-lg font-medium mb-2">You're on the list!</h3>
+                            <p className="text-muted-foreground">
+                              We'll notify you as soon as this investment opens. Check your email for confirmation.
+                            </p>
+                          </div>
+                        ) : (
+                          <form onSubmit={handleWaitlistSubmit} className="space-y-4">
+                            {error && (
+                              <div className="p-3 bg-red-500/10 border border-red-500/20 text-red-500 text-sm rounded">
+                                {error}
+                              </div>
+                            )}
+                            <div className="space-y-2">
+                              <Label htmlFor="waitlist-name">Full Name *</Label>
+                              <Input id="waitlist-name" name="name" placeholder="John Doe" required />
+                            </div>
+                            <div className="space-y-2">
+                              <Label htmlFor="waitlist-email">Email Address *</Label>
+                              <Input
+                                id="waitlist-email"
+                                name="email"
+                                type="email"
+                                placeholder="john@example.com"
+                                required
+                              />
+                            </div>
+                            <div className="space-y-2">
+                              <Label htmlFor="waitlist-phone">Phone Number *</Label>
+                              <Input
+                                id="waitlist-phone"
+                                name="phone"
+                                type="tel"
+                                placeholder="+234 800 000 0000"
+                                required
+                              />
+                            </div>
+                            <Button type="submit" className="w-full" disabled={isSubmitting}>
+                              {isSubmitting ? "Joining..." : "Join Waitlist"}
+                            </Button>
+                          </form>
+                        )}
+                      </DialogContent>
+                    </Dialog>
                   ) : (
                     <Button disabled className="w-full h-12">
                       Investment Closed
