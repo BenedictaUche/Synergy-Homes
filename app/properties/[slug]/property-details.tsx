@@ -5,7 +5,29 @@ import Link from "next/link"
 import { MapPin, Maximize2, Compass, FileText, Calendar, Layers, Check, Phone, Mail, ArrowLeft, Play, Share2 } from "lucide-react"
 import { ImageGallery } from "@/components/image-gallery"
 import { Button } from "@/components/ui/button"
-import type { LandParcel } from "@/lib/data"
+interface LandParcel {
+  id: string
+  name: string
+  slug: string
+  location: string
+  address: string
+  price: number
+  priceFormatted: string
+  description: string
+  shortDescription: string
+  size: number
+  sizeFormatted: string
+  landUse: "residential" | "commercial" | "mixed-use" | "agricultural" | "industrial"
+  topography: "flat" | "gently-sloping" | "hilly" | "waterfront"
+  status: "available" | "sold" | "reserved"
+  featured: boolean
+  investmentSuitable: boolean
+  features: string[]
+  infrastructure: string[]
+  images: string[]
+  videoUrl?: string
+  documentationType: "C of O" | "Governor's Consent" | "Deed of Assignment" | "Gazette" | "Survey Plan"
+}
 
 interface LandParcelDetailsProps {
   property: LandParcel

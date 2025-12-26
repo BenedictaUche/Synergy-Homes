@@ -123,7 +123,7 @@ export default function ContactPage() {
               <div className="mt-8 p-6 bg-card border border-border">
                 <h3 className="font-medium mb-3">Find Us on Map</h3>
                 <a
-                  href="https://maps.google.com/?q=Egbeda+Lagos"
+                  href="https://maps.app.goo.gl/bLc3mhakNrioGp4j7"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="block aspect-video relative overflow-hidden group"

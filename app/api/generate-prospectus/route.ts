@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { Resend } from 'resend'
+import { supabase } from '@/lib/supabase'
 
 const resend = new Resend(process.env.RESEND_API_KEY)
 
@@ -25,7 +26,10 @@ export async function POST(request: NextRequest) {
 
     // For now, we'll send an email with a download link
     if (userEmail && userName) {
-      await resend.emails.send({
+      if (!process.env.RESEND_API_KEY) {
+        console.warn('RESEND_API_KEY is not configured. Email will not be sent.')
+      } else {
+        await resend.emails.send({
         from: 'Synergy Homes <noreply@synergyhomes.com.ng>',
         to: userEmail,
         subject: `Investment Prospectus: ${investmentName}`,
@@ -92,14 +96,38 @@ export async function POST(request: NextRequest) {
             </body>
           </html>
         `,
-        // Uncomment when you have actual PDF files
-        // attachments: [
-        //   {
-        //     filename: `${investmentSlug}-prospectus.pdf`,
-        //     content: pdfBuffer,
-        //   },
-        // ],
-      })
+          // Uncomment when you have actual PDF files
+          // attachments: [
+          //   {
+          //     filename: `${investmentSlug}-prospectus.pdf`,
+          //     content: pdfBuffer,
+          //   },
+          // ],
+        })
+      }
+    }
+
+    // Save to database if Supabase is configured
+    if (supabase && userEmail && userName) {
+      try {
+        const { error: dbError } = await supabase
+          .from('prospectus_requests')
+          .insert({
+            investment_name: investmentName,
+            investment_slug: investmentSlug,
+            user_name: userName,
+            user_email: userEmail,
+            created_at: new Date().toISOString(),
+          })
+
+        if (dbError) {
+          console.error('Error saving prospectus request to database:', dbError)
+          // Don't fail the request if database save fails
+        }
+      } catch (dbError) {
+        console.error('Error saving prospectus request to database:', dbError)
+        // Don't fail the request if database save fails
+      }
     }
 
     // Log the download request

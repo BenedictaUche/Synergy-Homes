@@ -3,7 +3,24 @@
 import { motion } from "framer-motion"
 import Link from "next/link"
 import { MapPin, TrendingUp, Clock, ArrowRight } from "lucide-react"
-import type { Investment } from "@/lib/data"
+interface Investment {
+  id: string
+  name: string
+  slug: string
+  type: "residential" | "commercial" | "mixed-use" | "land"
+  minInvestment: number
+  minInvestmentFormatted: string
+  expectedROI: string
+  duration: string
+  location: string
+  description: string
+  shortDescription: string
+  benefits: string[]
+  requirements: string[]
+  faqs: { question: string; answer: string }[]
+  images: string[]
+  status: "open" | "closed" | "coming-soon"
+}
 
 interface InvestmentCardProps {
   investment: Investment

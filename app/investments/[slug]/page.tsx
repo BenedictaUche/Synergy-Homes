@@ -3,21 +3,28 @@ import { Navigation } from "@/components/navigation"
 import { Footer } from "@/components/footer"
 import { WhatsAppButton } from "@/components/whatsapp-button"
 import { InvestmentDetails } from "./investment-details"
-import { getInvestmentBySlug, investments } from "@/lib/data"
+import { sanityFetch } from "@/sanity/lib/live"
+import { client } from "@/sanity/lib/client"
+import { investmentQuery, investmentBySlugQuery } from "@/sanity/lib/queries"
+import { urlFor } from "@/sanity/lib/image"
 
 interface Props {
   params: Promise<{ slug: string }>
 }
 
 export async function generateStaticParams() {
-  return investments.map((investment) => ({
+  const investments = await client.fetch(investmentQuery)
+  return investments.map((investment: any) => ({
     slug: investment.slug,
   }))
 }
 
 export async function generateMetadata({ params }: Props) {
   const { slug } = await params
-  const investment = getInvestmentBySlug(slug)
+  const { data: investment } = await sanityFetch({
+    query: investmentBySlugQuery,
+    params: { slug }
+  })
 
   if (!investment) {
     return {
@@ -33,16 +40,26 @@ export async function generateMetadata({ params }: Props) {
 
 export default async function InvestmentPage({ params }: Props) {
   const { slug } = await params
-  const investment = getInvestmentBySlug(slug)
+  const { data: investment } = await sanityFetch({
+    query: investmentBySlugQuery,
+    params: { slug }
+  })
 
   if (!investment) {
     notFound()
   }
 
+  // Transform Sanity images to URLs
+  const transformedInvestment = {
+    ...investment,
+    id: investment._id,
+    images: investment.images?.map((img: any) => urlFor(img.asset).url()) || [],
+  }
+
   return (
     <main className="min-h-screen">
       <Navigation />
-      <InvestmentDetails investment={investment} />
+      <InvestmentDetails investment={transformedInvestment} />
       <Footer />
       <WhatsAppButton />
     </main>

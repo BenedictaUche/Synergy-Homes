@@ -18,7 +18,24 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
 import { useState } from "react"
-import type { Investment } from "@/lib/data"
+interface Investment {
+  id: string
+  name: string
+  slug: string
+  type: "residential" | "commercial" | "mixed-use" | "land"
+  minInvestment: number
+  minInvestmentFormatted: string
+  expectedROI: string
+  duration: string
+  location: string
+  description: string
+  shortDescription: string
+  benefits: string[]
+  requirements: string[]
+  faqs: { question: string; answer: string }[]
+  images: string[]
+  status: "open" | "closed" | "coming-soon"
+}
 
 interface InvestmentDetailsProps {
   investment: Investment
@@ -27,6 +44,7 @@ interface InvestmentDetailsProps {
 export function InvestmentDetails({ investment }: InvestmentDetailsProps) {
   const [isInterestOpen, setIsInterestOpen] = useState(false)
   const [isWaitlistOpen, setIsWaitlistOpen] = useState(false)
+  const [isProspectusOpen, setIsProspectusOpen] = useState(false)
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [submitSuccess, setSubmitSuccess] = useState(false)
   const [error, setError] = useState("")
@@ -125,38 +143,42 @@ export function InvestmentDetails({ investment }: InvestmentDetailsProps) {
     }
   }
 
-  const handleDownloadProspectus = async () => {
+  const handleProspectusSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault()
+    setIsSubmitting(true)
+    setError("")
+
+    const formData = new FormData(e.currentTarget)
+    const data = {
+      investmentName: investment.name,
+      investmentSlug: investment.slug,
+      userEmail: formData.get("email"),
+      userName: formData.get("name"),
+    }
+
     try {
-      // Prompt for email if user wants to receive via email
-      const userEmail = prompt("Enter your email to receive the prospectus:")
-      const userName = prompt("Enter your name:")
+      const response = await fetch('/api/generate-prospectus', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data)
+      })
 
-      if (userEmail && userName) {
-        const response = await fetch('/api/generate-prospectus', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            investmentName: investment.name,
-            investmentSlug: investment.slug,
-            userEmail,
-            userName
-          })
-        })
+      const result = await response.json()
 
-        const result = await response.json()
-
-        if (response.ok) {
-          alert(`Prospectus will be sent to ${userEmail} shortly. Check your inbox!`)
-        } else {
-          throw new Error(result.error)
-        }
-      } else {
-        // Try direct download
-        window.open(`/prospectus/${investment.slug}.pdf`, '_blank')
+      if (!response.ok) {
+        throw new Error(result.error || 'Failed to request prospectus')
       }
+
+      setSubmitSuccess(true)
+      setTimeout(() => {
+        setIsProspectusOpen(false)
+        setSubmitSuccess(false)
+        e.currentTarget?.reset()
+      }, 2500)
     } catch (err) {
-      console.error('Download error:', err)
-      alert('Unable to download prospectus. Please contact us at contact@synergyhomes.com.ng')
+      setError(err instanceof Error ? err.message : 'Something went wrong')
+    } finally {
+      setIsSubmitting(false)
     }
   }
 
@@ -363,14 +385,61 @@ export function InvestmentDetails({ investment }: InvestmentDetailsProps) {
                           )}
                         </DialogContent>
                       </Dialog>
-                      <Button
-                        variant="outline"
-                        className="w-full h-12 border-border hover:border-primary hover:text-primary bg-transparent"
-                        onClick={handleDownloadProspectus}
-                      >
-                        <Download size={16} className="mr-2" />
-                        Download Prospectus
-                      </Button>
+                      <Dialog open={isProspectusOpen} onOpenChange={setIsProspectusOpen}>
+                        <DialogTrigger asChild>
+                          <Button
+                            variant="outline"
+                            className="w-full h-12 border-border hover:border-primary hover:text-primary bg-transparent"
+                          >
+                            <Download size={16} className="mr-2" />
+                            Download Prospectus
+                          </Button>
+                        </DialogTrigger>
+                        <DialogContent className="sm:max-w-[500px]">
+                          <DialogHeader>
+                            <DialogTitle>Download Investment Prospectus</DialogTitle>
+                            <DialogDescription>
+                              Enter your details to receive the investment prospectus via email. The prospectus contains detailed information about this investment opportunity.
+                            </DialogDescription>
+                          </DialogHeader>
+                          {submitSuccess ? (
+                            <div className="py-8 text-center">
+                              <div className="w-16 h-16 bg-green-500/20 text-green-500 rounded-full flex items-center justify-center mx-auto mb-4">
+                                <Check size={32} />
+                              </div>
+                              <h3 className="text-lg font-medium mb-2">Prospectus Requested!</h3>
+                              <p className="text-muted-foreground">
+                                The prospectus will be sent to your email shortly. Please check your inbox.
+                              </p>
+                            </div>
+                          ) : (
+                            <form onSubmit={handleProspectusSubmit} className="space-y-4">
+                              {error && (
+                                <div className="p-3 bg-red-500/10 border border-red-500/20 text-red-500 text-sm rounded">
+                                  {error}
+                                </div>
+                              )}
+                              <div className="space-y-2">
+                                <Label htmlFor="prospectus-name">Full Name *</Label>
+                                <Input id="prospectus-name" name="name" placeholder="John Doe" required />
+                              </div>
+                              <div className="space-y-2">
+                                <Label htmlFor="prospectus-email">Email Address *</Label>
+                                <Input
+                                  id="prospectus-email"
+                                  name="email"
+                                  type="email"
+                                  placeholder="john@example.com"
+                                  required
+                                />
+                              </div>
+                              <Button type="submit" className="w-full" disabled={isSubmitting}>
+                                {isSubmitting ? "Sending..." : "Request Prospectus"}
+                              </Button>
+                            </form>
+                          )}
+                        </DialogContent>
+                      </Dialog>
                     </>
                   ) : investment.status === "coming-soon" ? (
                     <Dialog open={isWaitlistOpen} onOpenChange={setIsWaitlistOpen}>

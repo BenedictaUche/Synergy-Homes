@@ -6,8 +6,6 @@ import { Footer } from "@/components/footer"
 import { WhatsAppButton } from "@/components/whatsapp-button"
 // import { teamMembers } from "@/lib/data"
 import { Target, Eye, Heart, Award, Users, Building } from "lucide-react"
-import { sanityFetch } from "@/sanity/lib/live"
-import { teamMemberQuery } from "@/sanity/lib/queries"
 import { TeamMember } from "@/sanity/sanity.types"
 
 const values = [
@@ -279,8 +277,8 @@ export function AboutContent({ teamMembers }: { teamMembers: TeamMember[] }) {
               >
                 <div className="aspect-[3/4] relative overflow-hidden mb-4">
                   <img
-                    src={member?.image?.asset?._ref || "/placeholder.svg"}
-                    alt={member.name}
+                    src={(member as any)?.imageUrl || "/placeholder.svg"}
+                    alt={member.name || "Team member"}
                     className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-background via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />

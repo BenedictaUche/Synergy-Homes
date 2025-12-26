@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { Resend } from 'resend'
+import { supabase } from '@/lib/supabase'
 
 const resend = new Resend(process.env.RESEND_API_KEY)
 
@@ -17,7 +18,13 @@ export async function POST(request: NextRequest) {
     }
 
     // Send email to admin
-    const adminEmail = await resend.emails.send({
+    let adminEmail = null
+    let userEmail = null
+
+    if (!process.env.RESEND_API_KEY) {
+      console.warn('RESEND_API_KEY is not configured. Emails will not be sent.')
+    } else {
+      adminEmail = await resend.emails.send({
       from: 'Synergy Homes <noreply@synergyhomes.com.ng>',
       to: 'contact@synergyhomes.com.ng',
       replyTo: email,
@@ -69,10 +76,10 @@ export async function POST(request: NextRequest) {
           </body>
         </html>
       `,
-    })
+      })
 
-    // Send confirmation email to user
-    const userEmail = await resend.emails.send({
+      // Send confirmation email to user
+      userEmail = await resend.emails.send({
       from: 'Synergy Homes <noreply@synergyhomes.com.ng>',
       to: email,
       subject: `You're on the Waitlist for ${investmentName}`,
@@ -131,19 +138,38 @@ export async function POST(request: NextRequest) {
           </body>
         </html>
       `,
-    })
+      })
+    }
 
-    // Optional: Save to database
-    // await prisma.waitlist.create({
-    //   data: { investmentName, name, email, phone }
-    // })
+    // Save to database if Supabase is configured
+    if (supabase) {
+      try {
+        const { error: dbError } = await supabase
+          .from('waitlist_registrations')
+          .insert({
+            investment_name: investmentName,
+            name,
+            email,
+            phone,
+            created_at: new Date().toISOString(),
+          })
+
+        if (dbError) {
+          console.error('Error saving to database:', dbError)
+          // Don't fail the request if database save fails
+        }
+      } catch (dbError) {
+        console.error('Error saving to database:', dbError)
+        // Don't fail the request if database save fails
+      }
+    }
 
     return NextResponse.json(
       {
         success: true,
         message: 'Successfully joined waitlist',
-        adminEmailId: adminEmail.data?.id,
-        userEmailId: userEmail.data?.id
+        adminEmailId: adminEmail?.data?.id || null,
+        userEmailId: userEmail?.data?.id || null
       },
       { status: 200 }
     )
