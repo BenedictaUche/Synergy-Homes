@@ -30,10 +30,10 @@ interface Investment {
   location: string
   description: string
   shortDescription: string
-  benefits: string[]
-  requirements: string[]
-  faqs: { question: string; answer: string }[]
-  images: string[]
+  benefits?: string[] | null
+  requirements?: string[] | null
+  faqs?: { question: string; answer: string }[] | null
+  images?: string[] | null
   status: "open" | "closed" | "coming-soon"
 }
 
@@ -196,9 +196,11 @@ export function InvestmentDetails({ investment }: InvestmentDetailsProps) {
       </div>
 
       {/* Image Gallery */}
-      <div className="container mx-auto px-6 lg:px-12 mb-12">
-        <ImageGallery images={investment.images} title={investment.name} />
-      </div>
+      {investment.images && investment.images.length > 0 && (
+        <div className="container mx-auto px-6 lg:px-12 mb-12">
+          <ImageGallery images={investment.images} title={investment.name} />
+        </div>
+      )}
 
       {/* Investment Info */}
       <div className="container mx-auto px-6 lg:px-12">
@@ -249,33 +251,37 @@ export function InvestmentDetails({ investment }: InvestmentDetailsProps) {
               </div>
 
               {/* Benefits */}
-              <div className="mb-10">
-                <h2 className="text-xl font-medium mb-4">Investment Benefits</h2>
-                <div className="grid md:grid-cols-2 gap-3">
-                  {investment.benefits.map((benefit, index) => (
-                    <div key={index} className="flex items-start gap-3">
-                      <Check size={16} className="text-primary shrink-0 mt-1" />
-                      <span className="text-muted-foreground">{benefit}</span>
-                    </div>
-                  ))}
+              {investment.benefits && investment.benefits.length > 0 && (
+                <div className="mb-10">
+                  <h2 className="text-xl font-medium mb-4">Investment Benefits</h2>
+                  <div className="grid md:grid-cols-2 gap-3">
+                    {investment.benefits.map((benefit, index) => (
+                      <div key={index} className="flex items-start gap-3">
+                        <Check size={16} className="text-primary shrink-0 mt-1" />
+                        <span className="text-muted-foreground">{benefit}</span>
+                      </div>
+                    ))}
+                  </div>
                 </div>
-              </div>
+              )}
 
               {/* Requirements */}
-              <div className="mb-10">
-                <h2 className="text-xl font-medium mb-4">Investment Requirements</h2>
-                <div className="p-6 bg-card border border-border">
-                  {investment.requirements.map((requirement, index) => (
-                    <div key={index} className="flex items-start gap-3 mb-3 last:mb-0">
-                      <AlertCircle size={16} className="text-primary shrink-0 mt-1" />
-                      <span className="text-muted-foreground">{requirement}</span>
-                    </div>
-                  ))}
+              {investment.requirements && investment.requirements.length > 0 && (
+                <div className="mb-10">
+                  <h2 className="text-xl font-medium mb-4">Investment Requirements</h2>
+                  <div className="p-6 bg-card border border-border">
+                    {investment.requirements.map((requirement, index) => (
+                      <div key={index} className="flex items-start gap-3 mb-3 last:mb-0">
+                        <AlertCircle size={16} className="text-primary shrink-0 mt-1" />
+                        <span className="text-muted-foreground">{requirement}</span>
+                      </div>
+                    ))}
+                  </div>
                 </div>
-              </div>
+              )}
 
               {/* FAQs */}
-              {investment.faqs.length > 0 && (
+              {investment.faqs && investment.faqs.length > 0 && (
                 <div className="mb-10">
                   <h2 className="text-xl font-medium mb-4">Frequently Asked Questions</h2>
                   <Accordion type="single" collapsible className="space-y-2">

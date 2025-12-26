@@ -54,6 +54,9 @@ export default async function InvestmentPage({ params }: Props) {
     ...investment,
     id: investment._id,
     images: investment.images?.map((img: any) => urlFor(img.asset).url()) || [],
+    benefits: investment.benefits || [],
+    requirements: investment.requirements || [],
+    faqs: investment.faqs || [],
   }
 
   return (
