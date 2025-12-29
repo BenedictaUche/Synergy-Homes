@@ -2,9 +2,10 @@
 
 import { motion } from "framer-motion"
 import Link from "next/link"
-import { MapPin, Maximize2, Compass, FileText, Calendar, Layers, Check, Phone, Mail, ArrowLeft, Play, Share2 } from "lucide-react"
+import { MapPin, Maximize2, Compass, FileText, Calendar, Layers, Check, Phone, Mail, ArrowLeft, Play } from "lucide-react"
 import { ImageGallery } from "@/components/image-gallery"
 import { Button } from "@/components/ui/button"
+import { ShareDialog } from "@/components/share-dialog"
 interface LandParcel {
   id: string
   name: string
@@ -77,7 +78,7 @@ export function PropertyDetails({ property }: LandParcelDetailsProps) {
                   <span className={`px-3 py-1 text-xs tracking-wider uppercase ${statusColors[property.status]}`}>
                     {property.status}
                   </span>
-                  <span className="px-3 py-1 bg-card text-xs tracking-wider uppercase capitalize">{property.landUse}</span>
+                  <span className="px-3 py-1 bg-card text-xs tracking-wider uppercase">{property.landUse}</span>
                   {property.investmentSuitable && (
                     <span className="px-3 py-1 bg-primary/20 text-primary text-xs tracking-wider">
                       INVESTMENT SUITABLE
@@ -195,10 +196,11 @@ export function PropertyDetails({ property }: LandParcelDetailsProps) {
                     <Mail size={18} className="mr-2" />
                     Enquire Now
                   </Button>
-                  <Button variant="ghost" className="w-full h-12 text-muted-foreground hover:text-foreground">
-                    <Share2 size={18} className="mr-2" />
-                    Share Land
-                  </Button>
+                  <ShareDialog
+                    title={property.name}
+                    url={`/properties/${property.slug}`}
+                    description={property.shortDescription}
+                  />
                 </div>
               </div>
 

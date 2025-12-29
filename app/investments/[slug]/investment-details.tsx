@@ -196,11 +196,9 @@ export function InvestmentDetails({ investment }: InvestmentDetailsProps) {
       </div>
 
       {/* Image Gallery */}
-      {investment.images && investment.images.length > 0 && (
-        <div className="container mx-auto px-6 lg:px-12 mb-12">
-          <ImageGallery images={investment.images} title={investment.name} />
-        </div>
-      )}
+      <div className="container mx-auto px-6 lg:px-12 mb-12">
+        <ImageGallery images={investment.images || []} title={investment.name} />
+      </div>
 
       {/* Investment Info */}
       <div className="container mx-auto px-6 lg:px-12">

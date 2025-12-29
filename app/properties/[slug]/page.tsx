@@ -49,11 +49,24 @@ export default async function PropertyPage({ params }: Props) {
     notFound()
   }
 
+  // Placeholder images to use when no images are available
+  const placeholderImages = [
+    "/land.jpg",
+    "/land-two.jpg",
+    "/land-three.jpg",
+    "/land-four.jpg",
+  ]
+
   // Transform Sanity images to URLs
+  const images = land.images?.map((img: any) => urlFor(img.asset).url()) || []
+
+  // Use placeholder images if no images are available
+  const finalImages = images.length > 0 ? images : placeholderImages
+
   const transformedLand = {
     ...land,
     id: land._id,
-    images: land.images?.map((img: any) => urlFor(img.asset).url()) || [],
+    images: finalImages,
   }
 
   return (

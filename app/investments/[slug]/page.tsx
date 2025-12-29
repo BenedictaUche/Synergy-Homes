@@ -49,11 +49,24 @@ export default async function InvestmentPage({ params }: Props) {
     notFound()
   }
 
+  // Placeholder images to use when no images are available
+  const placeholderImages = [
+    "/land.jpg",
+    "/land-two.jpg",
+    "/land-three.jpg",
+    "/land-four.jpg",
+  ]
+
   // Transform Sanity images to URLs
+  const images = investment.images?.map((img: any) => urlFor(img.asset).url()) || []
+
+  // Use placeholder images if no images are available
+  const finalImages = images.length > 0 ? images : placeholderImages
+
   const transformedInvestment = {
     ...investment,
     id: investment._id,
-    images: investment.images?.map((img: any) => urlFor(img.asset).url()) || [],
+    images: finalImages,
     benefits: investment.benefits || [],
     requirements: investment.requirements || [],
     faqs: investment.faqs || [],
