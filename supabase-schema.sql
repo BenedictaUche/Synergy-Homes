@@ -36,6 +36,35 @@ CREATE TABLE IF NOT EXISTS waitlist_registrations (
   updated_at TIMESTAMPTZ DEFAULT NOW()
 );
 
+-- Table for site visit requests
+CREATE TABLE IF NOT EXISTS site_visits (
+  id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
+  property_name TEXT NOT NULL,
+  property_slug TEXT NOT NULL,
+  name TEXT NOT NULL,
+  email TEXT NOT NULL,
+  phone TEXT NOT NULL,
+  preferred_date DATE NOT NULL,
+  preferred_time TIME NOT NULL,
+  notes TEXT,
+  created_at TIMESTAMPTZ DEFAULT NOW(),
+  updated_at TIMESTAMPTZ DEFAULT NOW()
+);
+
+-- Table for property enquiries
+CREATE TABLE IF NOT EXISTS property_enquiries (
+  id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
+  property_name TEXT NOT NULL,
+  property_slug TEXT NOT NULL,
+  property_price TEXT,
+  name TEXT NOT NULL,
+  email TEXT NOT NULL,
+  phone TEXT NOT NULL,
+  message TEXT NOT NULL,
+  created_at TIMESTAMPTZ DEFAULT NOW(),
+  updated_at TIMESTAMPTZ DEFAULT NOW()
+);
+
 -- Create indexes for better query performance
 CREATE INDEX IF NOT EXISTS idx_investment_interests_email ON investment_interests(email);
 CREATE INDEX IF NOT EXISTS idx_investment_interests_created_at ON investment_interests(created_at);
@@ -43,11 +72,19 @@ CREATE INDEX IF NOT EXISTS idx_prospectus_requests_email ON prospectus_requests(
 CREATE INDEX IF NOT EXISTS idx_prospectus_requests_slug ON prospectus_requests(investment_slug);
 CREATE INDEX IF NOT EXISTS idx_waitlist_registrations_email ON waitlist_registrations(email);
 CREATE INDEX IF NOT EXISTS idx_waitlist_registrations_created_at ON waitlist_registrations(created_at);
+CREATE INDEX IF NOT EXISTS idx_site_visits_email ON site_visits(email);
+CREATE INDEX IF NOT EXISTS idx_site_visits_slug ON site_visits(property_slug);
+CREATE INDEX IF NOT EXISTS idx_site_visits_date ON site_visits(preferred_date);
+CREATE INDEX IF NOT EXISTS idx_property_enquiries_email ON property_enquiries(email);
+CREATE INDEX IF NOT EXISTS idx_property_enquiries_slug ON property_enquiries(property_slug);
+CREATE INDEX IF NOT EXISTS idx_property_enquiries_created_at ON property_enquiries(created_at);
 
 -- Enable Row Level Security (RLS) - adjust policies based on your needs
 ALTER TABLE investment_interests ENABLE ROW LEVEL SECURITY;
 ALTER TABLE prospectus_requests ENABLE ROW LEVEL SECURITY;
 ALTER TABLE waitlist_registrations ENABLE ROW LEVEL SECURITY;
+ALTER TABLE site_visits ENABLE ROW LEVEL SECURITY;
+ALTER TABLE property_enquiries ENABLE ROW LEVEL SECURITY;
 
 -- Create policies to allow service role to insert (for API routes)
 -- Note: These policies allow inserts from authenticated service role
@@ -74,6 +111,20 @@ CREATE POLICY "Allow service role to insert waitlist registrations"
   TO service_role
   WITH CHECK (true);
 
+-- Policy for site_visits
+CREATE POLICY "Allow service role to insert site visits"
+  ON site_visits
+  FOR INSERT
+  TO service_role
+  WITH CHECK (true);
+
+-- Policy for property_enquiries
+CREATE POLICY "Allow service role to insert property enquiries"
+  ON property_enquiries
+  FOR INSERT
+  TO service_role
+  WITH CHECK (true);
+
 -- Optional: Create a function to automatically update updated_at timestamp
 CREATE OR REPLACE FUNCTION update_updated_at_column()
 RETURNS TRIGGER AS $$
@@ -96,5 +147,15 @@ CREATE TRIGGER update_prospectus_requests_updated_at
 
 CREATE TRIGGER update_waitlist_registrations_updated_at
   BEFORE UPDATE ON waitlist_registrations
+  FOR EACH ROW
+  EXECUTE FUNCTION update_updated_at_column();
+
+CREATE TRIGGER update_site_visits_updated_at
+  BEFORE UPDATE ON site_visits
+  FOR EACH ROW
+  EXECUTE FUNCTION update_updated_at_column();
+
+CREATE TRIGGER update_property_enquiries_updated_at
+  BEFORE UPDATE ON property_enquiries
   FOR EACH ROW
   EXECUTE FUNCTION update_updated_at_column();

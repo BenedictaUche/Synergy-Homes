@@ -6,6 +6,8 @@ import { MapPin, Maximize2, Compass, FileText, Calendar, Layers, Check, Phone, M
 import { ImageGallery } from "@/components/image-gallery"
 import { Button } from "@/components/ui/button"
 import { ShareDialog } from "@/components/share-dialog"
+import { SiteVisitDialog } from "@/components/site-visit-dialog"
+import { EnquireDialog } from "@/components/enquire-dialog"
 interface LandParcel {
   id: string
   name: string
@@ -185,17 +187,15 @@ export function PropertyDetails({ property }: LandParcelDetailsProps) {
                 <div className="text-3xl font-light text-primary mb-6">{property.priceFormatted}</div>
 
                 <div className="space-y-3">
-                  <Button className="w-full h-12 bg-primary text-primary-foreground hover:bg-primary/90">
-                    <Phone size={18} className="mr-2" />
-                    Schedule Site Visit
-                  </Button>
-                  <Button
-                    variant="outline"
-                    className="w-full h-12 border-border hover:border-primary hover:text-primary bg-transparent"
-                  >
-                    <Mail size={18} className="mr-2" />
-                    Enquire Now
-                  </Button>
+                  <SiteVisitDialog
+                    propertyName={property.name}
+                    propertySlug={property.slug}
+                  />
+                  <EnquireDialog
+                    propertyName={property.name}
+                    propertySlug={property.slug}
+                    propertyPrice={property.priceFormatted}
+                  />
                   <ShareDialog
                     title={property.name}
                     url={`/properties/${property.slug}`}
