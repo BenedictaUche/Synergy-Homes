@@ -102,18 +102,18 @@ export function AboutContent({ teamMembers }: { teamMembers: TeamMember[] }) {
               </h2>
               <div className="space-y-4 text-muted-foreground leading-relaxed">
                 <p>
-                  Synergy Homes Limited was founded in 2005 with a singular vision: to redefine the luxury real estate
+                  Synergy Homes Limited was founded in 2020 with a singular vision: to redefine the luxury real estate
                   experience in Nigeria. What began as a small team of passionate professionals has grown into the
                   nation's most trusted name in premium property services.
                 </p>
                 <p>
-                  Our founder, Chief Adewale Johnson, recognized a gap in the market for truly world-class real estate
+                  Our founder, Mr. Alexander Ekwueme Onyekwere, recognized a gap in the market for truly world-class real estate
                   services that could meet the sophisticated needs of high-net-worth individuals and families. With
                   decades of industry experience, he assembled a team of experts dedicated to delivering exceptional
                   results.
                 </p>
                 <p>
-                  Today, we manage a portfolio of over ₦50 billion in property transactions and serve an exclusive
+                  Today, we manage a portfolio of over ₦50 million in property transactions and serve an exclusive
                   clientele across Nigeria and beyond. Our success is built on unwavering commitment to integrity,
                   excellence, and personalized service.
                 </p>
