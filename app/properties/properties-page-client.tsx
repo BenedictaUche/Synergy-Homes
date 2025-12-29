@@ -32,7 +32,19 @@ interface LandParcel {
   documentationType: "C of O" | "Governor's Consent" | "Deed of Assignment" | "Gazette" | "Survey Plan"
 }
 
-export function PropertiesPageClient({ landParcels }: { landParcels: LandParcel[] }) {
+interface PropertiesPageClientProps {
+  landParcels: LandParcel[]
+  availableLocations: string[]
+  priceRange: { min: number; max: number }
+  sizeRange: { min: number; max: number }
+}
+
+export function PropertiesPageClient({
+  landParcels,
+  availableLocations,
+  priceRange,
+  sizeRange,
+}: PropertiesPageClientProps) {
   const [filters, setFilters] = useState<FilterState>({
     search: "",
     propertyType: "all",
@@ -60,35 +72,55 @@ export function PropertiesPageClient({ landParcels }: { landParcels: LandParcel[
         return false
       }
 
-      // Location filter
+      // Location filter - match exact location or case-insensitive partial match
       if (filters.location !== "all") {
-        const locationMap: Record<string, string[]> = {
-          "victoria-island": ["victoria island"],
-          "banana-island": ["banana island"],
-          ikoyi: ["ikoyi"],
-          lekki: ["lekki", "ajah", "ibeju-lekki", "epe"],
-          abuja: ["abuja", "maitama", "gwarinpa", "cbd"],
+        const filterLocationLower = filters.location.toLowerCase()
+        const landLocationLower = land.location.toLowerCase()
+        if (!landLocationLower.includes(filterLocationLower) && filterLocationLower !== landLocationLower) {
+          return false
         }
-        const locationKeywords = locationMap[filters.location] || []
-        const matchesLocation = locationKeywords.some((keyword) => land.location.toLowerCase().includes(keyword))
-        if (!matchesLocation) return false
       }
 
       // Price range filter
-      if (filters.priceRange !== "all") {
+      if (filters.priceRange !== "all" && land.price) {
         const priceInMillions = land.price / 1000000
         switch (filters.priceRange) {
-          case "0-500":
-            if (priceInMillions >= 500) return false
+          case "0-100":
+            if (priceInMillions >= 100) return false
             break
-          case "500-800":
-            if (priceInMillions < 500 || priceInMillions >= 800) return false
+          case "100-300":
+            if (priceInMillions < 100 || priceInMillions >= 300) return false
             break
-          case "800-1000":
-            if (priceInMillions < 800 || priceInMillions >= 1000) return false
+          case "300-500":
+            if (priceInMillions < 300 || priceInMillions >= 500) return false
+            break
+          case "500-1000":
+            if (priceInMillions < 500 || priceInMillions >= 1000) return false
             break
           case "1000+":
             if (priceInMillions < 1000) return false
+            break
+        }
+      }
+
+      // Land size filter (using beds field)
+      if (filters.beds !== "all" && land.size) {
+        const sizeInSqm = land.size
+        switch (filters.beds) {
+          case "0-1000":
+            if (sizeInSqm >= 1000) return false
+            break
+          case "1000-2500":
+            if (sizeInSqm < 1000 || sizeInSqm >= 2500) return false
+            break
+          case "2500-5000":
+            if (sizeInSqm < 2500 || sizeInSqm >= 5000) return false
+            break
+          case "5000-10000":
+            if (sizeInSqm < 5000 || sizeInSqm >= 10000) return false
+            break
+          case "10000+":
+            if (sizeInSqm < 10000) return false
             break
         }
       }
@@ -131,7 +163,12 @@ export function PropertiesPageClient({ landParcels }: { landParcels: LandParcel[
       {/* Land Parcels Section */}
       <section className="py-16 lg:py-24 bg-background">
         <div className="container mx-auto px-6 lg:px-12">
-          <PropertyFilters onFilterChange={setFilters} />
+          <PropertyFilters
+            onFilterChange={setFilters}
+            availableLocations={availableLocations}
+            priceRange={priceRange}
+            sizeRange={sizeRange}
+          />
 
           {/* Results Count */}
           <div className="mb-8">

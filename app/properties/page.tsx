@@ -41,5 +41,32 @@ export default async function PropertiesPage() {
     images: land.images?.map((img: any) => urlFor(img.asset).url()) || [],
   }))
 
-  return <PropertiesPageClient landParcels={transformedLandParcels} />
+  // Extract unique locations from actual data
+  const locationStrings = transformedLandParcels
+    .map((land: LandParcel) => land.location)
+    .filter((loc: string | any[]): loc is string => typeof loc === 'string' && loc.length > 0)
+  const uniqueLocations = Array.from(new Set(locationStrings)).sort()
+
+  // Calculate price ranges from actual data
+  const prices: number[] = transformedLandParcels
+    .map((land: LandParcel) => land.price)
+    .filter((price: number): price is number => typeof price === 'number' && price > 0)
+  const minPrice = prices.length > 0 ? Math.min(...prices) : 0
+  const maxPrice = prices.length > 0 ? Math.max(...prices) : 0
+
+  // Calculate size ranges from actual data
+  const sizes: number[] = transformedLandParcels
+    .map((land: LandParcel) => land.size)
+    .filter((size: number): size is number => typeof size === 'number' && size > 0)
+  const minSize = sizes.length > 0 ? Math.min(...sizes) : 0
+  const maxSize = sizes.length > 0 ? Math.max(...sizes) : 0
+
+  return (
+    <PropertiesPageClient
+      landParcels={transformedLandParcels}
+      availableLocations={uniqueLocations as string[]}
+      priceRange={{ min: minPrice, max: maxPrice }}
+      sizeRange={{ min: minSize, max: maxSize }}
+    />
+  )
 }

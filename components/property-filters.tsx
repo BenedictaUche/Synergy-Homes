@@ -9,6 +9,9 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 
 interface PropertyFiltersProps {
   onFilterChange: (filters: FilterState) => void
+  availableLocations?: string[]
+  priceRange?: { min: number; max: number }
+  sizeRange?: { min: number; max: number }
 }
 
 export interface FilterState {
@@ -29,14 +32,7 @@ const landUseTypes = [
   { value: "industrial", label: "Industrial" },
 ]
 
-const locations = [
-  { value: "all", label: "All Locations" },
-  { value: "victoria-island", label: "Victoria Island" },
-  { value: "banana-island", label: "Banana Island" },
-  { value: "ikoyi", label: "Ikoyi" },
-  { value: "lekki", label: "Lekki / Ajah / Ibeju-Lekki" },
-  { value: "abuja", label: "Abuja" },
-]
+// Locations will be generated dynamically from props
 
 const priceRanges = [
   { value: "all", label: "Any Price" },
@@ -63,7 +59,20 @@ const statusOptions = [
   { value: "sold", label: "Sold" },
 ]
 
-export function PropertyFilters({ onFilterChange }: PropertyFiltersProps) {
+export function PropertyFilters({
+  onFilterChange,
+  availableLocations = [],
+  priceRange,
+  sizeRange,
+}: PropertyFiltersProps) {
+  // Generate location options from actual data
+  const locations = [
+    { value: "all", label: "All Locations" },
+    ...availableLocations.map((loc) => ({
+      value: loc.toLowerCase().replace(/\s+/g, "-"),
+      label: loc,
+    })),
+  ]
   const [showFilters, setShowFilters] = useState(false)
   const [filters, setFilters] = useState<FilterState>({
     search: "",
